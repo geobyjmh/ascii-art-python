@@ -7,12 +7,24 @@ from PIL import Image, UnidentifiedImageError
 ASCII_CHARS = "@%#*+=-:. "
 
 
-def image_to_ascii(image_path: str, width: int = 80) -> str:
+def rotate_image(img: Image.Image, angle: int) -> Image.Image:
+    if angle == 0:
+        return img
+    if angle == 90:
+        return img.transpose(Image.Transpose.ROTATE_90)
+    if angle == 180:
+        return img.transpose(Image.Transpose.ROTATE_180)
+    if angle == -90:
+        return img.transpose(Image.Transpose.ROTATE_270)
+    raise ValueError("rotate must be one of 0, 90, 180, -90")
+
+
+def image_to_ascii(image_path: str, width: int = 80, rotate: int = 0) -> str:
     # TODO: add stronger input validation for width and file types.
     # TODO: improve brightness mapping for better-looking output.
     # TODO: add automated tests for success and failure cases.
     with Image.open(image_path) as img:
-        img = img.convert("L")
+        img = rotate_image(img, rotate).convert("L")
         aspect_ratio = img.height / img.width
         height = max(1, int(width * aspect_ratio / 2))
         img = img.resize((width, height))
@@ -34,16 +46,20 @@ def main() -> int:
     parser.add_argument("input_image", help="Path to the input image file")
     parser.add_argument("-o", "--output", help="Optional path to write the ASCII art text")
     parser.add_argument("-w", "--width", type=int, default=80, help="Output width in characters")
+    parser.add_argument("--rotate", type=int, default=0, choices=[0, 90, 180, -90], help="Rotate the output by 0, 90, 180, or -90 degrees")
     parser.add_argument("--show", action="store_true", help="Print the ASCII art to the terminal")
     args = parser.parse_args()
 
     try:
-        ascii_art = image_to_ascii(args.input_image, width=args.width)
+        ascii_art = image_to_ascii(args.input_image, width=args.width, rotate=args.rotate)
     except FileNotFoundError:
         print(f"Error: file not found: {args.input_image}", file=sys.stderr)
         return 1
     except UnidentifiedImageError:
         print(f"Error: unsupported or invalid image file: {args.input_image}", file=sys.stderr)
+        return 1
+    except ValueError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
         return 1
 
     if args.output:
