@@ -24,18 +24,24 @@
 - Use descriptive names for variables and functions.
 
 ## Recommended Project Structure
-- `main.py` or `ascii_art.py` for the main conversion logic
-- `cli.py` for command-line interface handling
-- `tests/` for unit tests
-- `requirements.txt` for dependencies
+- main.py or ascii_art.py for the main conversion logic
+- cli.py for command-line interface handling
+- tests/ for unit tests
+- requirements.txt for dependencies
+
+## Dependencies
+- Install dependencies from the environment or package manager before running the project.
+- Pillow is required for image loading and processing.
+- pytest is recommended for automated tests.
+- Keep dependency usage minimal for the initial prototype.
 
 ## Example CLI Usage
 ```bash
-python main.py input.jpg --output output.txt --width 80
+python ascii_art.py input.jpg --output output.txt --width 80
 ```
 
 ## Implementation Notes
-- Use `pathlib` for file path handling.
+- Use pathlib for file path handling.
 - Handle missing files, invalid files, and unsupported formats gracefully.
 - Keep the initial implementation simple and readable.
 - Focus on correctness and usability before adding advanced features.

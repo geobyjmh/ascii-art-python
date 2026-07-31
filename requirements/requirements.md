@@ -26,18 +26,26 @@ The system shall convert an input image into an ASCII art text representation an
 ### FR2: ASCII Conversion
 - The system shall convert the input image into ASCII art text using a simple grayscale mapping method.
 - The output shall be composed of printable ASCII characters only.
+- The ASCII output shall preserve the source image’s orientation and direction; it must not be rotated by 90 degrees or otherwise displayed in the wrong orientation.
 
 ### FR3: Output Format
 - The system shall generate a plain text output.
 - The system shall support writing the output to a file.
 - The system shall support displaying the output in the terminal.
+- The output shall appear in the same orientation as the input image when shown in a file or terminal.
 
 ### FR4: Output Size
 - The system shall produce output that fits a small-screen width.
 - The default target output width shall be approximately 80 characters.
 - The output width shall be configurable by the user.
 
-### FR5: Error Handling
+### FR5: Orientation Control
+- The system shall support a command-line switch to rotate the rendered ASCII art output by 0, 90, 180, or -90 degrees.
+- The switch shall accept values 0, 90, 180, and -90.
+- The default orientation shall be 0 degrees.
+- The system shall preserve the requested orientation when writing to a file or displaying in the terminal.
+
+### FR6: Error Handling
 - The system shall fail gracefully when the input file is missing, unreadable, corrupt, or unsupported.
 - The system shall provide a clear and human-readable error message.
 - The system shall return a non-zero exit code on failure.
@@ -51,7 +59,8 @@ The system shall convert an input image into an ASCII art text representation an
 ### Must
 - Given a valid JPEG, PNG, or GIF file, the system shall generate ASCII art output successfully.
 - The output shall be a human-readable plain text file or terminal display containing only printable ASCII characters.
-- The converted output shall preserve the image’s general shape and proportions.
+- The converted output shall preserve the image’s general shape, proportions, and orientation.
+- The system shall not rotate the ASCII art output relative to the input image.
 - The system shall return a clear error message and a non-zero failure status for missing, unreadable, corrupt, or unsupported files.
 - The system shall handle files up to 10 MB and 4000 × 4000 pixels without crashing.
 
@@ -74,6 +83,7 @@ The system shall handle the following cases gracefully:
 - Very large images
 - Images with transparency or unusual color profiles
 - Non-square images
+- Portrait or landscape images that should preserve their original orientation
 - Missing files or permission errors
 
 ## 6. Assumptions and Risks
