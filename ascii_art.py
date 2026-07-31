@@ -4,7 +4,11 @@ import argparse
 import sys
 from pathlib import Path
 
-from PIL import Image, UnidentifiedImageError
+try:
+    from PIL import Image, UnidentifiedImageError
+except ImportError:
+    print("Error: Pillow library is required. Install it with: pip install Pillow", file=sys.stderr)
+    sys.exit(1)
 
 ASCII_CHARS = "@%#*+=-:. "
 
